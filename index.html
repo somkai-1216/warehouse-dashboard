@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Warehouse Dashboard</title>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="app">
+
+    <header class="header">
+      <div>
+        <h1>Warehouse Dashboard</h1>
+        <p>ระบบทดลองแสดงข้อมูลจากฐานข้อมูล Google Sheet</p>
+      </div>
+    </header>
+
+    <section class="cards">
+      <div class="card">
+        <p>งานทั้งหมด</p>
+        <h2 id="totalCount">0</h2>
+      </div>
+
+      <div class="card warning">
+        <p>รอดำเนินการ</p>
+        <h2 id="pendingCount">0</h2>
+      </div>
+
+      <div class="card success">
+        <p>เสร็จแล้ว</p>
+        <h2 id="doneCount">0</h2>
+      </div>
+
+      <div class="card danger">
+        <p>ยกเลิก</p>
+        <h2 id="cancelCount">0</h2>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-header">
+        <h2>รายการแจ้งปัญหา</h2>
+
+        <input
+          id="searchInput"
+          type="text"
+          placeholder="ค้นหา Ticket, สาขา, สินค้า, สถานะ..."
+        />
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Ticket ID</th>
+              <th>วันที่</th>
+              <th>สาขา</th>
+              <th>สินค้า</th>
+              <th>ประเภทปัญหา</th>
+              <th>สถานะ</th>
+            </tr>
+          </thead>
+          <tbody id="ticketTable"></tbody>
+        </table>
+      </div>
+    </section>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
