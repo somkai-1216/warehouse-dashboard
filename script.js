@@ -5,11 +5,18 @@ let tickets = [];
 const ticketTable = document.getElementById("ticketTable");
 const searchInput = document.getElementById("searchInput");
 const statusFilter = document.getElementById("statusFilter");
+const startDateInput = document.getElementById("startDate");
+const endDateInput = document.getElementById("endDate");
+const clearFilterBtn = document.getElementById("clearFilterBtn");
 
 function normalizeTicket(item) {
+  const rawDate = item["Created_At"] || item["วันที่"] || item["Date"] || "";
+
   return {
     ticketId: item["Ticket_ID"] || item["Ticket ID"] || "",
-    date: formatDate(item["Created_At"] || item["วันที่"] || item["Date"] || ""),
+    rawDate: rawDate,
+    date: formatDate(rawDate),
+    dateForFilter: toDateInputValue(rawDate),
     branch: item["Branch_Code"] || item["สาขา"] || "",
     itemName: item["Item_Name"] || item["ชื่อสินค้า"] || item["สินค้า"] || "",
     issueType: item["Issue_Type"] || item["ประเภทปัญหา"] || "",
@@ -31,6 +38,22 @@ function formatDate(value) {
     month: "2-digit",
     day: "2-digit"
   });
+}
+
+function toDateInputValue(value) {
+  if (!value) return "";
+
+  const date = new Date(value);
+
+  if (isNaN(date.getTime())) {
+    return "";
+  }
+
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
 }
 
 async function loadTickets() {
@@ -118,6 +141,8 @@ function renderTable(data) {
 function applyFilters() {
   const keyword = searchInput.value.toLowerCase();
   const selectedStatus = statusFilter.value;
+  const startDate = startDateInput.value;
+  const endDate = endDateInput.value;
 
   const filteredData = tickets.filter(item => {
     const matchKeyword =
@@ -130,14 +155,34 @@ function applyFilters() {
     const matchStatus =
       selectedStatus === "ทั้งหมด" || item.status === selectedStatus;
 
-    return matchKeyword && matchStatus;
+    const itemDate = item.dateForFilter;
+
+    const matchStartDate =
+      !startDate || (itemDate && itemDate >= startDate);
+
+    const matchEndDate =
+      !endDate || (itemDate && itemDate <= endDate);
+
+    return matchKeyword && matchStatus && matchStartDate && matchEndDate;
   });
 
   renderDashboard(filteredData);
   renderTable(filteredData);
 }
 
+function clearFilters() {
+  searchInput.value = "";
+  statusFilter.value = "ทั้งหมด";
+  startDateInput.value = "";
+  endDateInput.value = "";
+
+  applyFilters();
+}
+
 searchInput.addEventListener("input", applyFilters);
 statusFilter.addEventListener("change", applyFilters);
+startDateInput.addEventListener("change", applyFilters);
+endDateInput.addEventListener("change", applyFilters);
+clearFilterBtn.addEventListener("click", clearFilters);
 
 loadTickets();
