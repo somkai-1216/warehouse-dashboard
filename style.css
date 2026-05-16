@@ -89,12 +89,27 @@ body {
   margin: 0;
 }
 
-input {
+.filter-group {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+input,
+select {
   padding: 12px 14px;
   border: 1px solid #d1d5db;
   border-radius: 12px;
-  width: 320px;
   font-size: 14px;
+  background: white;
+}
+
+input {
+  width: 320px;
+}
+
+select {
+  min-width: 160px;
 }
 
 .table-wrap {
@@ -152,7 +167,13 @@ td {
     align-items: stretch;
   }
 
-  input {
+  .filter-group {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  input,
+  select {
     width: 100%;
   }
 

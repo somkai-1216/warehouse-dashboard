@@ -4,6 +4,7 @@ let tickets = [];
 
 const ticketTable = document.getElementById("ticketTable");
 const searchInput = document.getElementById("searchInput");
+const statusFilter = document.getElementById("statusFilter");
 
 function normalizeTicket(item) {
   return {
@@ -49,8 +50,7 @@ async function loadTickets() {
 
     tickets = result.data.map(normalizeTicket);
 
-    renderDashboard(tickets);
-    renderTable(tickets);
+    applyFilters();
 
     console.log("โหลดข้อมูลสำเร็จ:", tickets);
   } catch (error) {
@@ -115,21 +115,29 @@ function renderTable(data) {
   });
 }
 
-searchInput.addEventListener("input", function () {
+function applyFilters() {
   const keyword = searchInput.value.toLowerCase();
+  const selectedStatus = statusFilter.value;
 
   const filteredData = tickets.filter(item => {
-    return (
+    const matchKeyword =
       String(item.ticketId).toLowerCase().includes(keyword) ||
       String(item.branch).toLowerCase().includes(keyword) ||
       String(item.itemName).toLowerCase().includes(keyword) ||
       String(item.issueType).toLowerCase().includes(keyword) ||
-      String(item.status).toLowerCase().includes(keyword)
-    );
+      String(item.status).toLowerCase().includes(keyword);
+
+    const matchStatus =
+      selectedStatus === "ทั้งหมด" || item.status === selectedStatus;
+
+    return matchKeyword && matchStatus;
   });
 
   renderDashboard(filteredData);
   renderTable(filteredData);
-});
+}
+
+searchInput.addEventListener("input", applyFilters);
+statusFilter.addEventListener("change", applyFilters);
 
 loadTickets();

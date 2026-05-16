@@ -45,11 +45,20 @@
       <div class="panel-header">
         <h2>รายการแจ้งปัญหา</h2>
 
-        <input
-          id="searchInput"
-          type="text"
-          placeholder="ค้นหา Ticket, สาขา, สินค้า, สถานะ..."
-        />
+        <div class="filter-group">
+          <input
+            id="searchInput"
+            type="text"
+            placeholder="ค้นหา Ticket, สาขา, สินค้า, สถานะ..."
+          />
+
+          <select id="statusFilter">
+            <option value="ทั้งหมด">ทั้งหมด</option>
+            <option value="รอดำเนินการ">รอดำเนินการ</option>
+            <option value="เสร็จแล้ว">เสร็จแล้ว</option>
+            <option value="ยกเลิก">ยกเลิก</option>
+          </select>
+        </div>
       </div>
 
       <div class="table-wrap">
